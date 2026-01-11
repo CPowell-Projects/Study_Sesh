@@ -1,0 +1,48 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Study-Sesh</title>
+</head>
+<body>
+
+    <h1>Study-Sesh</h1>
+
+
+
+    {% if error %}
+     <p style="color: red;">{{ error }}</p>
+    {% endif %}
+
+    <form method="POST">
+        <label>
+            Course name:
+            <input type="text" name="course" required>
+        </label>
+        <br><br>
+
+        <label>
+            Due date:
+            <input type="date" name="due" required>
+        </label>
+        <br><br>
+
+        <button type="submit">Add Assignment</button>
+    </form>
+
+    <h2>Assignments</h2>
+
+    <ul>
+        {% for assignment in assignments %}
+            <li>
+                <strong>{{ assignment.course }}</strong>
+                — due {{ assignment.due }}
+               <form method="POST"  style="display:inline;"> 
+                <input type = "hidden" name="delete_index" value="{{ loop.index0 }}">
+                <button type ="submit">Delete</button>
+            </form>
+            </li>
+        {% endfor %}
+    </ul>
+
+</body>
+</html>
