@@ -1,19 +1,36 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect, url_for
 from datetime import date
+import json
+import os
+DATA_FILE = "assignments.json"
 app = Flask(__name__)
 
-assignments = []
+if os.path.exists(DATA_FILE):
+    try:
+        with open (DATA_FILE, "r" ) as f:
+            assignments = json.load(f)
+    except json.JSONDecodeError:
+        assignments = []
+    else:
+        assignments =[]
+def save_assignments():
+    with open(DATA_FILE, "w") as f:
+        json.dump(assignments, f, indent=2)
 
 @app.route("/", methods=["GET","POST"])
 def home():
     error = None
+    acton = None
     if request.method == "POST":
-        if "delete_index" in request.form:
+        action = request.form.get("action")
+        if action == "delete":
             index = int(request.form["delete_index"])
             if 0 <= index < len(assignments):
                 assignments.pop(index)
-
-        else:
+                save_assignments()
+                return redirect(url_for("home"))
+        
+        elif action == "add":
             course = request.form["course"]
             due = request.form["due"]
             today = date.today()
@@ -25,9 +42,12 @@ def home():
                  "due": due
 
         })
-            assignments.sort(
+        save_assignments()
+        if error is None:
+            return redirect(url_for("home"))
+        assignments.sort(
                 
-            key = lambda assignments: date.fromisoformat(assignments["due"])
+            key=lambda assignment: date.fromisoformat(assignments["due"])
     )
     return render_template("assignments.html", assignments = assignments, error=error)
 

@@ -14,6 +14,7 @@
     {% endif %}
 
     <form method="POST">
+        <input type="hidden" name="action" value="add">
         <label>
             Course name:
             <input type="text" name="course" required>
@@ -36,9 +37,10 @@
             <li>
                 <strong>{{ assignment.course }}</strong>
                 — due {{ assignment.due }}
-               <form method="POST"  style="display:inline;"> 
-                <input type = "hidden" name="delete_index" value="{{ loop.index0 }}">
-                <button type ="submit">Delete</button>
+               <form method="POST"  style="display:inline;">
+                    <input type="hidden" name="action" value="delete"> 
+                    <input type = "hidden" name="delete_index" value="{{ loop.index0 }}">
+                    <button type ="submit">Delete</button>
             </form>
             </li>
         {% endfor %}
