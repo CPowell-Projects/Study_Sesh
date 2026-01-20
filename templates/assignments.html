@@ -1,50 +1,60 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Study-Sesh</title>
+    <title>Study Sesh</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
 
-    <h1>Study-Sesh</h1>
+<div class="container">
+    <h1>📚 Study Sesh</h1>
+    <p class="subtitle">Track assignments by due date</p>
 
+    <form method="POST" class="add-form">
+        <input type="hidden" name="action" value="add">
 
+        <input
+            type="text"
+            name="course"
+            placeholder="Course name" required >
+
+        <input
+            type="date"
+            name="due" required >
+
+        <button type="submit"> Add Assignment</button>
+    </form>
 
     {% if error %}
-     <p style="color: red;">{{ error }}</p>
+        <p class="error">{{ error }}</p>
     {% endif %}
-
-    <form method="POST">
-        <input type="hidden" name="action" value="add">
-        <label>
-            Course name:
-            <input type="text" name="course" required>
-        </label>
-        <br><br>
-
-        <label>
-            Due date:
-            <input type="date" name="due" required>
-        </label>
-        <br><br>
-
-        <button type="submit">Add Assignment</button>
-    </form>
 
     <h2>Assignments</h2>
 
-    <ul>
-        {% for assignment in assignments %}
-            <li>
-                <strong>{{ assignment.course }}</strong>
-                — due {{ assignment.due }}
-               <form method="POST"  style="display:inline;">
-                    <input type="hidden" name="action" value="delete"> 
-                    <input type = "hidden" name="delete_index" value="{{ loop.index0 }}">
-                    <button type ="submit">Delete</button>
-            </form>
-            </li>
-        {% endfor %}
-    </ul>
+    {% if assignments %}
+        <ul class="assignment-list">
+            {% for assignment in assignments %}
+                <li class="assignment-card">
+                    <div>
+                        <strong>{{ assignment.course }}</strong>
+                        <span class="due-date">
+                            due {{ assignment.due }}
+                        </span>
+                    </div>
+
+                    <form method="POST">
+                        <input type="hidden" name="action" value="delete">
+                        <input type="hidden" name="delete_index" value="{{ loop.index0 }}">
+                        <button class="delete-btn">Delete</button>
+                    </form>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p class="empty">No assignments yet.</p>
+    {% endif %}
+</div>
 
 </body>
 </html>
