@@ -3,9 +3,9 @@ Study_Sesh is a simple student assignment tracker built with Flask.
 
 ## Features
 Add assignments with course name and due date
-Prevents invalid (past) due dates
-Automatically sorts assignments by soonest due date
-Delete assignments
+Prevent invalid (past) due dates
+Automatically sort assignments by soonest due date
+Delete assignment
 Persistent storage using JSON
 Server-side validation and error handling
 
